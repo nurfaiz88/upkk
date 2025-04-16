@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Model Evaluation</title>
+    <style>  
+        .banner {
+            width: 100%; /* Full width of the container */
+            height: auto; /* Adjust height automatically */
+            min-height: 100px; /* Minimum height */
+            background-image: url('{{ url_for('static', filename='images/banner.jpg') }}');
+            background-size: cover; /* Ensures the image covers the entire banner */
+            background-position: center; /* Centers the image */
+            background-repeat: no-repeat; /* Prevents the image from repeating */
+        }
+        table {  
+            width: 100%;  
+            border-collapse: collapse; /* Combines borders of adjacent cells */  
+        }  
+        th, td {  
+            border: 1px solid black; /* Define border for each cell */  
+            padding: 8px; /* Adds space inside each cell */  
+            text-align: left; /* Aligns text to the left */  
+        }  
+        th {  
+            background-color: #f2f2f2; /* Light gray background for the header */  
+        }  
+    </style> 
+</head>
+<body>
+    <div class="banner"></div>
+    <h1>Model Evaluation</h1>
+    <h2>Performed Score Accuracy: {{ accuracy }}</h2>
+    <h3>Performed Score Classification Report</h3>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Subject</th>
+                <th>Precision</th>
+                <th>Recall</th>
+                <th>F1-Score</th>
+                <th>Support</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for subject, metrics in report.items() %}
+                {% if subject not in ['accuracy', 'macro avg', 'weighted avg', 'samples avg'] %}
+                <tr>
+                    <td>{{ subject }}</td>
+                    <td>{{ metrics['precision'] }}</td>
+                    <td>{{ metrics['recall'] }}</td>
+                    <td>{{ metrics['f1-score'] }}</td>
+                    <td>{{ metrics['support'] }}</td>
+                </tr>
+                {% endif %}
+            {% endfor %}
+        </tbody>
+    </table>
+    <h2>Underperformed Score Accuracy: {{ underperformed_accuracy }}</h2>
+    <h3>Underperformed Classification Report</h3>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Subject</th>
+                <th>Precision</th>
+                <th>Recall</th>
+                <th>F1-Score</th>
+                <th>Support</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for subject, metrics in underperformed_accuracyreport.items() %}
+                {% if subject not in ['underperformed_accuracy', 'macro avg', 'weighted avg', 'samples avg'] %}
+                <tr>
+                    <td>{{ subject }}</td>
+                    <td>{{ metrics['precision'] }}</td>
+                    <td>{{ metrics['recall'] }}</td>
+                    <td>{{ metrics['f1-score'] }}</td>
+                    <td>{{ metrics['support'] }}</td>
+                </tr>
+                {% endif %}
+            {% endfor %}
+        </tbody>
+    </table>
+    <br />
+    <title>Underperformed Students</title>
+    <h1>Underperforming Students by Subject</h1>
+    <img src="/plot_underperformed.png" alt="Underperformed Plot">  
+    <br />
+    <h1>List of Underperformed Students with advice</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Student Name</th>
+                <th>Advice List</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for student in students_advice_list %}
+            <tr>
+                <td>{{ student['student_name'] }}</td>
+                <td>{{ student['Advice'] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <title>Performed Students</title>
+    <h1>List of Students Predicted to Get an "A" - For all Subject</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Total A's</th>
+                <th>student Name</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for Total_A, student_name in students_dict.items() %}
+                <tr>
+                    <td>{{ Total_A }}</td>
+                {% for detail_student_name in student_name[0] %}
+                        <td>{{ detail_student_name }}</td>
+                {% endfor %}
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <h1>Number of Students Predicted to Get an "A" - For Specific Subject</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Subject</th>
+                <th>Number of Students</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for subject, count in a_score_dict.items() %}
+            <tr>
+                <td>{{ subject }}</td>
+                <td>{{ count }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <br />
+    <h1>Specific Students Predicted to Get an "A" - For Specific Subject</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Subject</th>
+                <th>Name of Students</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for subject, students in students_with_ascoree.items() %}
+            <tr>
+                <td>{{ subject }}</td>
+                <td>{{ ', '.join(students) }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <br />
+    
+</body>
+</html>
