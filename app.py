@@ -31,7 +31,7 @@ sktam_maxattendanceratebaseline = 101 # Historical maximum attendance (%)
 sktam_minparticipationbaseline = 50 # Historical minimum for overall student participation (%)
 sktam_maxparticipationbaseline = 101 # Historucal maximum for overall student participation (%)
 sktam_scorethreshold = 85 # Define the threshold for an A score for every subject
-sktam_minscorethreshold = 60  # Define the threshold for underperformance
+sktam_minscorethreshold = 70  # Define the threshold for underperformance
 
 sktam_student_ids = range(sktam_student_startno, sktam_student_endno)  # 120 unique students ID's range
 student_uniqueid = [f"{i}" for i in sktam_student_ids] # pre-assign students matrix number by each class
